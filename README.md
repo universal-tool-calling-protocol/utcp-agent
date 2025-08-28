@@ -150,6 +150,7 @@ See the `examples/` directory for comprehensive examples:
 - `system_prompt`: Custom system prompt for the agent
 - `checkpointer`: LangGraph checkpointer for conversation memory
 - `callbacks`: LangChain callbacks for observability
+- `summarize_threshold`: Token count threshold for context summarization (default: 80000)
 
 ### UTCP Configuration
 
