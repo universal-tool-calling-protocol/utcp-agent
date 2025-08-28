@@ -84,120 +84,50 @@ if __name__ == "__main__":
 ### With Memory and Custom Prompts
 
 ```python
-import asyncio
-import os
-from langchain_openai import ChatOpenAI
 from utcp_agent import UtcpAgent, UtcpAgentConfig
 from langgraph.checkpoint.memory import MemorySaver
 
-async def main():
-    # Set your OpenAI API key
-    llm = ChatOpenAI(
-        model="gpt-4o-mini",
-        api_key=os.getenv("OPENAI_API_KEY")
-    )
-    
-    agent_config = UtcpAgentConfig(
-        max_tools_per_search=10,
-        checkpointer=MemorySaver(),
-        system_prompt="You are a helpful AI assistant with access to various tools through UTCP."
-    )
+agent_config = UtcpAgentConfig(
+    max_tools_per_search=10,
+    checkpointer=MemorySaver(),
+    system_prompt="You are a helpful AI assistant with access to various tools through UTCP."
+)
 
-    agent = await UtcpAgent.create(
-        llm=llm,
-        utcp_config={
-            "manual_call_templates": [{
-                "name": "openlibrary",
-                "call_template_type": "http",
-                "http_method": "GET",
-                "url": "https://openlibrary.org/static/openapi.json",
-                "content_type": "application/json"
-            }]
-        },
-        agent_config=agent_config
-    )
+agent = await UtcpAgent.create(
+    llm=llm,
+    utcp_config=utcp_config,
+    agent_config=agent_config
+)
 
-    # Use thread_id for conversation continuity
-    response = await agent.chat("Find me a science fiction book", thread_id="user_1")
-    print(f"Agent: {response}")
-
-if __name__ == "__main__":
-    asyncio.run(main())
+# Use thread_id for conversation continuity
+response = await agent.chat("Find me a science fiction book", thread_id="user_1")
 ```
 
-### With Environment Variables from a file
+### With Environment Variables
 
 ```python
 from pathlib import Path
-import asyncio
-import os
-from langchain_openai import ChatOpenAI
-from utcp_agent import UtcpAgent
 
-async def main():
-    llm = ChatOpenAI(
-        model="gpt-4o-mini",
-        api_key=os.getenv("OPENAI_API_KEY")
-    )
-
-    utcp_config = {
-        "load_variables_from": [{
-            "variable_loader_type": "dotenv",
-            "env_file_path": str(Path(__file__).parent / ".env")
-        }],
-        "manual_call_templates": [{
-            "name": "openlibrary",
-            "call_template_type": "http", 
-            "http_method": "GET",
-            "url": "https://openlibrary.org/static/openapi.json",
-            "content_type": "application/json"
-        }]
-    }
-
-    agent = await UtcpAgent.create(
-        llm=llm,
-        utcp_config=utcp_config
-    )
-
-    response = await agent.chat("Can you search for books by J.R.R. Tolkien?")
-    print(f"Agent: {response}")
-
-if __name__ == "__main__":
-    asyncio.run(main())
+utcp_config = {
+    "load_variables_from": [{
+        "variable_loader_type": "dotenv",
+        "env_file_path": str(Path(__file__).parent / ".env")
+    }],
+    "manual_call_templates": [{
+        "name": "openlibrary",
+        "call_template_type": "http", 
+        "http_method": "GET",
+        "url": "https://openlibrary.org/static/openapi.json",
+        "content_type": "application/json"
+    }]
+}
 ```
 
 ### Streaming Execution
 
 ```python
-import asyncio
-import os
-from langchain_openai import ChatOpenAI
-from utcp_agent import UtcpAgent
-
-async def main():
-    llm = ChatOpenAI(
-        model="gpt-4o-mini",
-        api_key=os.getenv("OPENAI_API_KEY")
-    )
-    
-    agent = await UtcpAgent.create(
-        llm=llm,
-        utcp_config={
-            "manual_call_templates": [{
-                "name": "openlibrary",
-                "call_template_type": "http",
-                "http_method": "GET",
-                "url": "https://openlibrary.org/static/openapi.json",
-                "content_type": "application/json"
-            }]
-        }
-    )
-    
-    async for step in agent.stream("Search for AI books"):
-        print(f"Step: {step}")
-
-if __name__ == "__main__":
-    asyncio.run(main())
+async for step in agent.stream("Search for AI books"):
+    print(f"Step: {step}")
 ```
 
 ## Workflow
