@@ -1,0 +1,92 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "utcp-agent"
+version = "1.0.0"
+description = "A ready-to-use agent for UTCP tool calling"
+readme = "README.md"
+license = "MPL-2.0"
+authors = [
+    {name = "UTCP Team"}
+]
+maintainers = [
+    {name = "UTCP Team"}
+]
+keywords = ["ai", "agent", "utcp", "langgraph", "langchain", "tools"]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.9"
+
+# Core dependencies
+dependencies = [
+    "langgraph>=0.0.40",
+    "langchain-core>=0.1.0",
+    "langchain>=0.1.0",
+    "pydantic>=2.0.0",
+    "utcp>=1.0.1",
+    "utcp-http>=1.0.3",
+    "utcp-mcp>=1.0.1",
+    "utcp-text>=1.0.1",
+    "utcp-cli>=1.0.1",
+]
+
+[project.optional-dependencies]
+# LLM provider dependencies
+openai = [
+    "langchain-openai>=0.1.0"
+]
+anthropic = [
+    "langchain-anthropic>=0.1.0"
+]
+community = [
+    "langchain-community>=0.0.20"
+]
+
+examples = [
+    "python-dotenv>=1.0.0",
+    "langchain-openai>=0.1.0",
+    "langchain-anthropic>=0.1.0",
+    "langchain-community>=0.0.20"
+]
+
+# Observability and monitoring
+observability = [
+    "langsmith>=0.1.0"
+]
+
+# Development dependencies
+dev = [
+    "build",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "coverage",
+    "twine",
+]
+
+# All LLM providers
+llm-all = [
+    "langchain-openai>=0.1.0",
+    "langchain-anthropic>=0.1.0",
+    "langchain-community>=0.0.20"
+]
+
+# Everything for full functionality
+all = [
+    "langchain-openai>=0.1.0",
+    "langchain-anthropic>=0.1.0",
+    "langchain-community>=0.0.20",
+    "langsmith>=0.1.0"
+]
+
+[project.urls]
+Homepage = "https://utcp.io"
+Source = "https://github.com/universal-tool-calling-protocol/utcp-agent"
+Issues = "https://github.com/universal-tool-calling-protocol/utcp-agent/issues"
