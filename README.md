@@ -1,8 +1,48 @@
-# UtcpAgent
+<div align="center">
+<img alt="utcp agent logo" src="https://github.com/user-attachments/assets/77723130-ecbc-4d1d-9e9b-20f978882699" width="80%" style="margin: 20px auto;">
 
-A ready-to-use agent that provides intelligent UTCP tool calling capabilities. The agent automatically discovers, searches, and executes UTCP tools based on user queries.
+<h1 align="center">🚀 Ready-to-use agent with intelligent tool-calling capabilities</h1>
+<p align="center">
+    <a href="https://github.com/universal-tool-calling-protocol">
+        <img src="https://img.shields.io/github/followers/universal-tool-calling-protocol?label=Follow%20Org&logo=github" /></a>
+    <a href="https://pypi.org/project/utcp-agent/" title="PyPI Version">
+        <img src="https://img.shields.io/pypi/v/utcp-agent.svg"/></a>
+    <a href="https://github.com/universal-tool-calling-protocol/utcp-agent/blob/main/LICENSE" alt="License">
+        <img src="https://img.shields.io/github/license/universal-tool-calling-protocol/utcp-agent" /></a>
+    <a href="https://utcp.io/" alt="Documentation">
+        <img src="https://img.shields.io/badge/docs-utcp.io-blue" /></a>
+</p>
+</div>
+
+**UTCP Agent** is the easiest way to build custom, ready-to-use agents which have intelligent tool calling capabilities and can connect to any native endpoint. The agent automatically discovers, searches, and executes UTCP tools based on user queries.
+
+The Universal Tool Calling Protocol (UTCP) is an open standard that enables AI agents to discover and directly call tools across various communication protocols, eliminating the need for wrapper servers and reducing latency.
+
+## Features
+
+| Feature | Description |
+| :--- | :--- |
+| **🤖 Intelligent Tool Discovery** | Automatically searches and selects relevant UTCP tools based on user queries. |
+| **🌐 Multi-LLM Support**| Compatible with OpenAI, Anthropic, and other LangChain-supported language models. |
+| **🔄 LangGraph Workflow** | Uses LangGraph for structured agent execution with proper state management. |
+| **💨 Streaming Support** | Optional streaming of workflow execution steps for real-time feedback. |
+| **🧠 Conversation Memory** | Built-in conversation history and checkpointing for continuous conversations. |
+| **🔧 Flexible Configuration** | Easily configurable through UTCP client config and agent config. |
 
 ## Quick Start
+
+### Installation
+
+```bash
+pip install utcp-agent langchain-openai
+```
+
+Set your API key:
+```bash
+export OPENAI_API_KEY=your_api_key_here
+```
+
+### Spin up your agent:
 
 ```python
 import asyncio
@@ -35,28 +75,9 @@ async def main():
     response = await agent.chat("Can you search for books by George Orwell?")
     print(f"Agent: {response}")
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())
 ```
-
-## Installation
-
-```bash
-pip install utcp-agent langchain-openai
-```
-
-Set your API key:
-```bash
-export OPENAI_API_KEY=your_api_key_here
-```
-
-## Features
-
-- **LangGraph Workflow**: Uses LangGraph for structured agent execution with proper state management
-- **Intelligent Tool Discovery**: Automatically searches and selects relevant UTCP tools based on user queries
-- **Multi-LLM Support**: Compatible with OpenAI, Anthropic, and other LangChain-supported language models
-- **Streaming Support**: Optional streaming of workflow execution steps
-- **Conversation Memory**: Built-in conversation history and checkpointing
-- **Flexible Configuration**: Configurable through UTCP client config and agent config
 
 ## Advanced Configuration
 
@@ -111,13 +132,13 @@ async for step in agent.stream("Search for AI books"):
 
 ## Workflow
 
-The agent follows a structured workflow using LangGraph:
+The agent follows a structured workflow using LangGraph, a library for building stateful, multi-actor applications with LLMs.
 
-1. **Analyze Task**: Understands the user's query and formulates the current task
-2. **Search Tools**: Uses UTCP to find relevant tools for the task  
-3. **Decide Action**: Determines whether to call tools or respond directly
-4. **Execute Tools**: Calls the selected tool with appropriate arguments
-5. **Respond**: Formats and returns the final response to the user
+1.  **Analyze Task**: Understands the user's query and formulates the current task.
+2.  **Search Tools**: Uses UTCP to find relevant tools for the task.
+3.  **Decide Action**: Determines whether to call tools or respond directly.
+4.  **Execute Tools**: Calls the selected tool with appropriate arguments.
+5.  **Respond**: Formats and returns the final response to the user.
 
 ```mermaid
 graph TD
@@ -133,31 +154,33 @@ graph TD
 
 ## Examples
 
-See the `examples/` directory for comprehensive examples:
+See the [`examples/` directory](https://github.com/universal-tool-calling-protocol/utcp-agent/tree/main/examples) for comprehensive examples:
 
-- **`basic_openai.py`**: Using GPT models with book search
-- **`basic_anthropic.py`**: Using Claude models
-- **`streaming_example.py`**: Real-time workflow monitoring
-- **`config_file_example.py`**: Loading UTCP configuration from files
-- **`memory_conversation.py`**: Multi-turn conversations with memory
+*   **`basic_openai.py`**: Using GPT models with book search.
+*   **`basic_anthropic.py`**: Using Claude models.
+*   **`streaming_example.py`**: Real-time workflow monitoring.
+*   **`config_file_example.py`**: Loading UTCP configuration from files.
+*   **`memory_conversation.py`**: Multi-turn conversations with memory.
 
 ## Configuration Options
 
 ### UtcpAgentConfig
 
-- `max_iterations`: Maximum workflow iterations (default: 3)
-- `max_tools_per_search`: Maximum tools to retrieve per search (default: 10)
-- `system_prompt`: Custom system prompt for the agent
-- `checkpointer`: LangGraph checkpointer for conversation memory
-- `callbacks`: LangChain callbacks for observability
-- `summarize_threshold`: Token count threshold for context summarization (default: 80000)
+| Option | Description |
+| :--- | :--- |
+| `max_iterations` | Maximum workflow iterations (default: 3). |
+| `max_tools_per_search` | Maximum tools to retrieve per search (default: 10). |
+| `system_prompt` | Custom system prompt for the agent. |
+| `checkpointer`| LangGraph checkpointer for conversation memory. |
+| `callbacks` | LangChain callbacks for observability. |
+| `summarize_threshold` | Token count threshold for context summarization (default: 80000). |
 
 ### UTCP Configuration
 
-The agent accepts standard UTCP client configuration:
-- Variable definitions and loading
-- Manual call templates
-- Tool provider configurations
+The agent accepts a standard UTCP client configuration, which can include:
+*   Variable definitions and loading
+*   Manual call templates
+*   Tool provider configurations
 
 ## API Reference
 
@@ -165,35 +188,36 @@ The agent accepts standard UTCP client configuration:
 
 #### Class Methods
 
-- `create(llm, utcp_config=None, agent_config=None, root_dir=None)`
-  - Create agent with automatic UTCP client initialization
+*   `create(llm, utcp_config=None, agent_config=None, root_dir=None)`
+    *   Creates and initializes a UtcpAgent with an automatic UTCP client.
 
 #### Instance Methods
 
-- `chat(user_input: str, thread_id: Optional[str] = None) -> str`
-  - Process user input and return agent response
-  - Use thread_id for conversation continuity
+*   `chat(user_input: str, thread_id: Optional[str] = None) -> str`
+    *   Processes user input and returns the agent's response.
+    *   Use `thread_id` for maintaining conversational continuity.
 
-- `stream(user_input: str, thread_id: Optional[str] = None)`
-  - Stream workflow execution steps
+*   `stream(user_input: str, thread_id: Optional[str] = None)`
+    *   Streams the workflow execution steps.
 
 ## Error Handling
 
-The agent includes comprehensive error handling:
-- Tool execution failures are gracefully handled
-- JSON parsing errors in LLM responses are managed
-- UTCP client errors are caught and reported
-- Fallback responses ensure the agent always responds
+The agent includes comprehensive error handling to manage:
+*   Tool execution failures
+*   JSON parsing errors in LLM responses
+*   UTCP client errors
+*   Fallback responses to ensure the agent always provides a reply
 
 ## Logging
 
-Enable logging to monitor agent behavior:
+Enable logging to monitor the agent's behavior:
 
 ```python
 import logging
 logging.basicConfig(level=logging.INFO)
 # Disable UTCP library logging for cleaner output
 logging.getLogger("utcp").setLevel(logging.WARNING)
+
 ```
 
 ## Contributing
