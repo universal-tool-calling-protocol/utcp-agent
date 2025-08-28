@@ -154,7 +154,7 @@ graph TD
 
 ## Examples
 
-See the `examples/` directory in the [GitHub repository](https://github.com/universal-tool-calling-protocol/utcp-agent) for comprehensive examples:
+See the [`examples/` directory](https://github.com/universal-tool-calling-protocol/utcp-agent/tree/main/examples) for comprehensive examples:
 
 *   **`basic_openai.py`**: Using GPT models with book search.
 *   **`basic_anthropic.py`**: Using Claude models.
