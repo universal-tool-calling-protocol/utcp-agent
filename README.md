@@ -5,7 +5,7 @@
 <p align="center">
     <a href="https://github.com/universal-tool-calling-protocol">
         <img src="https://img.shields.io/github/followers/universal-tool-calling-protocol?label=Follow%20Org&logo=github" /></a>
-    <a href="https://pypi.org/project/utcp-agent/" alt="PyPI Version">
+    <a href="https://pypi.org/project/utcp-agent/" title="PyPI Version">
         <img src="https://img.shields.io/pypi/v/utcp-agent.svg"/></a>
     <a href="https://github.com/universal-tool-calling-protocol/utcp-agent/blob/main/LICENSE" alt="License">
         <img src="https://img.shields.io/github/license/universal-tool-calling-protocol/utcp-agent" /></a>
