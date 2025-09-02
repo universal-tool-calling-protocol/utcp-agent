@@ -29,7 +29,6 @@ from langgraph.graph.state import CompiledStateGraph, RunnableConfig
 from utcp.exceptions import UtcpVariableNotFound
 from utcp.utcp_client import UtcpClient
 from utcp.data.utcp_client_config import UtcpClientConfig
-from langchain_utcp_adapters.tools import search_utcp_tools, convert_utcp_tool_to_langchain_tool
 from utcp.data.tool import Tool, ToolSerializer
 # Configure logger
 logger = logging.getLogger(__name__)
@@ -364,18 +363,24 @@ Respond ONLY with the JSON object, no other text."""
             logger.info(f"[ExecuteTools] Tool result: {str(result)[:100] + '...' if len(str(result)) > 100 else str(result)}")
             
             # Add tool call and result to messages
-            tool_call_msg = f"Tool called: {tool_name} with arguments: {arguments}"
+            tool_call_msg = AIMessage(content=f"Tool called: {tool_name} with arguments: {arguments}")
             try:
                 tool_result_msg = HumanMessage.model_validate(result)
-            except ValidationError:
+            except (ValidationError, TypeError):
                 try:
                     tool_result_msg = HumanMessage.model_validate([result])
-                except ValidationError:
-                    tool_result_msg = f"Tool result: {result}"
+                except (ValidationError, TypeError):
+                    if str(result).strip() == "":
+                        tool_result_msg = HumanMessage(content="Result is empty. Try different arguments or a different tool.")
+                    else:
+                        tool_result_msg = HumanMessage(content=f"Tool result: {result}")
+                        
+                        if self._estimate_token_count([tool_result_msg]) > self.config.summarize_threshold:
+                            tool_result_msg = HumanMessage(content="Result is too long to display. Try different arguments or a different tool. This is the beginning of the result: " + str(result)[:100] + "...")
 
             updated_messages = messages + [
-                AIMessage(content=tool_call_msg),
-                HumanMessage(content=tool_result_msg)
+                tool_call_msg,
+                tool_result_msg
             ]
             
             return {

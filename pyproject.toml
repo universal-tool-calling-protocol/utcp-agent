@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "utcp-agent"
-version = "1.0.0"
+version = "1.0.1"
 description = "A ready-to-use agent for UTCP tool calling"
 readme = "README.md"
 license = "MPL-2.0"
