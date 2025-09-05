@@ -54,6 +54,7 @@ class UtcpAgentConfig:
     checkpointer: Optional[BaseCheckpointSaver] = None
     callbacks: Optional[Callbacks] = None  # LangFuse, LangSmith, custom callbacks
     summarize_threshold: int = 80000  # Token count threshold for context summarization
+    recursion_limit: int = 25
 
 
 class UtcpAgent:
@@ -522,6 +523,8 @@ Provide a concise summary that captures the essential points and context."""
             
             # Configure for checkpointing and callbacks
             config = {}
+            if self.config.recursion_limit:
+                config["recursion_limit"] = self.config.recursion_limit
             if self.checkpointer:
                 # Auto-generate thread_id if not provided but checkpointer is configured
                 actual_thread_id = thread_id or str(uuid.uuid4())
@@ -536,7 +539,7 @@ Provide a concise summary that captures the essential points and context."""
             result = await self.graph.ainvoke(initial_state, config=config)
             
             final_response = result.get("final_response", "I'm sorry, I couldn't process your request.")
-            logger.info(f"[Chat] Workflow completed successfully. Response: {final_response[:100]}{'...' if len(final_response) > 100 else ''}")
+            logger.info("[Chat] Workflow completed successfully.")
             
             return final_response
             
