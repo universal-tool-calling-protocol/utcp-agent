@@ -116,7 +116,7 @@ Your workflow:
 3. Either call appropriate tools or respond directly if no tools are needed
 4. Provide clear, helpful responses based on tool results or your knowledge
 
-You have access to a special tool called 'answer' when you want to respond directly to the user without calling other tools.
+You have access to a special tool called 'respond' when you want to respond directly to the user without calling other tools.
 
 Be concise and helpful in your responses."""
 
@@ -148,7 +148,7 @@ Be concise and helpful in your responses."""
             }
         )
         
-        workflow.add_edge("execute_tools", "decide_action")  # Route back to decision making
+        workflow.add_edge("execute_tools", "analyze_task")  # Route back to decision making
         workflow.add_edge("respond", END)
         
         return workflow.compile(checkpointer=self.checkpointer)
@@ -159,18 +159,19 @@ Be concise and helpful in your responses."""
         
         # Create task analysis prompt
         task_analysis_messages = [
-            SystemMessage(content="Based on the conversation history, what is the current task that needs to be accomplished? Respond with a concise task description. Do not include 'the current task is' just the task description."),
+            SystemMessage(content=self.system_prompt),
+            SystemMessage(content="Based on the conversation history, what is the next step that needs to be accomplished? Respond with a concise next step description. Do not include 'the next step is' just the next step description."),
             *messages,
-            HumanMessage(content="The current task is:\n")
+            HumanMessage(content="The next step is:\n")
         ]
 
         estimated_tokens = self._estimate_token_count(task_analysis_messages)
-        if estimated_tokens <= self.config.summarize_threshold:
+        if estimated_tokens > self.config.summarize_threshold:
             messages = await self._summarize_context(messages)
             task_analysis_messages = [
-                SystemMessage(content="Based on the conversation history, what is the current task that needs to be accomplished? Respond with a concise task description. Do not include 'the current task is' just the task description."),
+                SystemMessage(content="Based on the conversation history, what is the next step that needs to be accomplished? Respond with a concise next step description. Do not include 'the next step is' just the next step description."),
                 *messages,
-                HumanMessage(content="The current task is:\n")
+                HumanMessage(content="The next step is:\n")
             ]
         
         try:
@@ -179,6 +180,8 @@ Be concise and helpful in your responses."""
             
             logger.info(f"[AnalyzeTask] Analyzed task: {current_task}")
             
+            messages = messages + [HumanMessage(content="The next step is:\n"), AIMessage(content=current_task)]
+
             return {
                 "current_task": current_task,
                 "next_action": "search_tools",
@@ -386,7 +389,7 @@ Respond ONLY with the JSON object, no other text."""
             
             return {
                 "messages": updated_messages,
-                "next_action": "decide_action"  # Go back to decision making
+                "next_action": "analyze_task"  # Go back to decision making
             }
             
         except Exception as e:

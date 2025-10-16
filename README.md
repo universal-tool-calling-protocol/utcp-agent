@@ -144,11 +144,10 @@ The agent follows a structured workflow using LangGraph, a library for building 
 graph TD
     A[User Input] --> B[Analyze Task]
     B --> C[Search Tools]
-    C --> D[Decide Action]
-    D --> E{Action Type}
-    E -->|Call Tool| F[Execute Tools]
-    E -->|Respond| G[Generate Response]
-    F --> G
+    C --> D{Decide Action}
+    D -->|Call Tool| F[Execute Tools]
+    D -->|Respond| G[Generate Response]
+    F --> B
     G --> H[End]
 ```
 
